@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
-from Credit_Card_Selector.Database.general_utils import logger, load_csv_data, create_collection_if_not_exists
+from Credit_Card_Selector.Database.general_utils import logger, load_csv_data, create_collection_if_not_exists, \
+    create_snapshot
 from Credit_Card_Selector.Database.Credit_Card_Profiles_Handler.credit_card_profiles_handler import (
     process_survey_response
 )
@@ -37,6 +38,7 @@ def update_database():
     """API-endpoint om de database bij te werken met de nieuwste CSV-gegevens."""
     try:
         logger.info("🔹 Handmatige database-update gestart...")
+        create_snapshot(CREDIT_CARDS_COLLECTION)
         create_collection_if_not_exists(CREDIT_CARDS_COLLECTION)
 
         data = load_csv_data(SERVER_CSV_PATH)
@@ -59,7 +61,7 @@ def update_database():
 def merge_and_categorize():
     """API-endpoint om creditcardgegevens samen te voegen en te categoriseren."""
     try:
-        scrapers_folder = '../../Data_Handler/Scrape Data/Scrapers'
+        scrapers_folder = '../../Data_Handler/Scrape_Data/Scrapers'
         merged_output_file = '../../Data_Handler/PreProcessor/merged_credit_cards.csv'
         categorized_output_file = '../../Data_Handler/PreProcessor/categorized_credit_cards.csv'
 
@@ -82,4 +84,3 @@ def merge_and_categorize():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-# test

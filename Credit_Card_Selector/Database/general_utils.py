@@ -5,12 +5,13 @@ import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 from qdrant_client.conversions.common_types import VectorParams
+from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 
 from Credit_Card_Selector.Database.qdrant_config import qdrant_client
 
 # === Configuratie ===
-ENV_PATH = "../../../../.env"
+ENV_PATH = ".env"  # Path relative to the project root
 VECTOR_SIZE = 384
 DIFFERENCES_LOG_FILE = "differences.log"
 
@@ -102,3 +103,11 @@ def create_collection_if_not_exists(collection_name):
             logger.error(f"Fout bij aanmaken collectie: {e}")
     else:
         logger.info(f"Collectie '{collection_name}' bestaat al.")
+
+def create_snapshot(collection_name):
+    """Maak een snapshot van de collectie."""
+    try:
+        qdrant_client.create_snapshot(collection_name=collection_name)
+        logger.info(f"Snapshot van collectie '{collection_name}' aangemaakt.")
+    except Exception as e:
+        logger.error(f"Fout bij maken snapshot: {e}")

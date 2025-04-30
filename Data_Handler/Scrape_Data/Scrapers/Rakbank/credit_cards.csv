@@ -1,0 +1,58 @@
+Bank_ID,Card_Link,Card_Image,Card_ID,Card_Type,Card_Network,Islamic,Minimum_Income,Minimum_Age,Minimum_Credit_Limit,Eligibility_Requirements,Employment_Type,Nationality,Residency_Required,Credit_Score_Required,Bank_Relationship_Required,Fatwa_Approval,Uncategorized - ,Uncategorized - card,Uncategorized - air arabia,Uncategorized - hero,Uncategorized - :,Uncategorized - Exclusive Transportation Perks,Uncategorized - Home Loan,Uncategorized - Exclusive Offers on Hotels,Uncategorized - Get great car rental savings,Uncategorized - Card Image,Uncategorized - savings accounts,Uncategorized - Car rental savings,"Uncategorized - 20,000 AirRewards bonus: No jo",Uncategorized - Air Arabia Card,Uncategorized - hero alt,Uncategorized - Car Rental Savings,Uncategorized - Red Credit Card,Uncategorized - image,Uncategorized - RAKIslamic Platinum Credit Car,Uncategorized - Everyday earnings,Uncategorized - RAKrewards on every spend: Ear,Uncategorized - Introducing the RAKislamic Wor,Uncategorized - Emirates Skywards World Elite,Uncategorized - RAKIslamic World Credit Card,Uncategorized - Hotel & accommodation offers,Uncategorized - Introducing the Platinum Credi,Uncategorized - Utility bill payments made eas,Uncategorized - No annual fee ever: Plus a hos
+6,https://www.rakbank.ae/en/cards/credit-cards/world-credit-card/,,World Credit Card,0,0,False,20000,21,0,"Age:
+21 years
+Residency:
+Citizen or resident of the UAE
+Other Requirements: 
+Minimum monthly salary of AED 20,000
+21 years
+Citizen or resident of the UAE
+Minimum monthly salary of AED 20,000",0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+6,https://www.rakbank.ae/en/cards/credit-cards/titanium-credit-card/,,Titanium Credit Card,0,0,False,8000,21,0,"Age:
+21 years
+Residency:
+Citizen or resident of the UAE
+Other Requirements: 
+Minimum monthly salary of AED 8,000
+21 years
+Citizen or resident of the UAE
+Minimum monthly salary of AED 8,000",0,0,0,0,0,0,1,0,0,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+6,https://www.rakbank.ae/en/cards/credit-cards/air-arabia-platinum/,,Air Arabia Platinum Credit Card,0,0,False,5000,N/A,0,"Requirements:
+Minimum monthly salary of AED 5,000
+Minimum monthly salary of AED 5,000",0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+6,https://www.rakbank.ae/en/cards/credit-cards/red-credit-card/,,RED Credit Card,0,0,False,5000,21,0,"Age:
+21 years
+Residency:
+Citizen or resident of the UAE
+Other Requirements: 
+Minimum monthly salary of AED 5,000
+21 years
+Citizen or resident of the UAE
+Minimum monthly salary of AED 5,000",0,0,0,0,0,0,1,1,1,0,1,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+6,https://www.rakbank.ae/en/islamic/personal/cards/credit-cards/world-credit-card/,,RAKislamic World Credit Card,0,0,True,20000,21,0,"Age:
+Minimum 21 years
+Minimum 21 years
+Other Requirements:
+Minimum monthly salary of AED 20,000
+Self-employed persons must have a quarterly credit turnover of AED 500,000
+Provide a security cheque for the value of the credit card limit
+Minimum monthly salary of AED 20,000
+Self-employed persons must have a quarterly credit turnover of AED 500,000
+Provide a security cheque for the value of the credit card limit",0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0
+6,https://www.rakbank.ae/en/islamic/personal/cards/credit-cards/watani-credit-card/,,Watani Credit Card,0,0,True,N/A,21,0,"Age:
+Minimum 21 years
+Minimum 21 years
+Nationality:
+UAE Nationals only
+UAE Nationals only
+Other Requirements:
+Monthly income of AED 15,000 and above
+Monthly income of AED 15,000 and above",0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0
+6,https://www.rakbank.ae/en/islamic/personal/cards/credit-cards/rakislamic-platinum-credit-card/,,RAKislamic Platinum Credit Card,0,0,True,5000,21,0,"Age:
+Over 21 years of age
+Over 21 years of age
+Other Requirements:
+Minimum monthly salary of AED 5,000 
+Self-employed individuals must have a quarterly turnover of AED 150,000 or an average balance of AED 75,000 and a security cheque to the value of the credit card limit
+Minimum monthly salary of AED 5,000
+Self-employed individuals must have a quarterly turnover of AED 150,000 or an average balance of AED 75,000 and a security cheque to the value of the credit card limit",0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,0,1,1,1

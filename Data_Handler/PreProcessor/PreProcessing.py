@@ -130,7 +130,7 @@ def categorize_columns(df):
 
 
 def main():
-    scrapers_folder = '../Scrape Data/Scrapers'
+    scrapers_folder = '../Scrape_Data/Scrapers'
     merged_output_file = 'merged_credit_cards.csv'
     categorized_output_file = 'categorized_credit_cards.csv'
 
