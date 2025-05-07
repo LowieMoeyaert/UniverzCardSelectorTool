@@ -7,7 +7,13 @@ from Credit_Card_Selector.Database.qdrant_config import qdrant_client
 # === Configuratie ===
 CREDIT_CARDS_COLLECTION = "credit_cards"
 CSV_PATH = "../../../Data_Handler/PreProcessor/merged_credit_cards.csv"
-SERVER_CSV_PATH = "../../Data_Handler/PreProcessor/merged_credit_cards.csv"
+
+
+def normalize_value(value):
+    """Normaliseer waarde, behandel NaN of lege waarden."""
+    if value is None or (isinstance(value, float) and np.isnan(value)):
+        return None
+    return value
 
 
 def update_or_add_credit_card(credit_card):

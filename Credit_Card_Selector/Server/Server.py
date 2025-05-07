@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from Credit_Card_Selector.Database.general_utils import logger, load_csv_data, create_collection_if_not_exists, \
     create_snapshot
 from Credit_Card_Selector.Database.Credit_Card_Profiles_Handler.credit_card_profiles_handler import (
-    process_survey_response
+    handle_survey_response
 )
 
 from Credit_Card_Selector.Database.Credit_Card_Handler.credit_card_handler import (
@@ -22,7 +22,7 @@ def process_survey():
         if not data:
             return jsonify({"error": "Geen JSON-gegevens ontvangen."}), 400
 
-        recommended_cards = process_survey_response(data)
+        recommended_cards = handle_survey_response(data)
 
         if not recommended_cards:
             return jsonify({"message": "Geen geschikte kaarten gevonden."}), 200

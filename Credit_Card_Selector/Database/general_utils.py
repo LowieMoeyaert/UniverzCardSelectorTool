@@ -11,9 +11,11 @@ from sentence_transformers import SentenceTransformer
 from Credit_Card_Selector.Database.qdrant_config import qdrant_client
 
 # === Configuratie ===
-ENV_PATH = ".env"  # Path relative to the project root
-VECTOR_SIZE = 384
+ENV_PATH = "../../../../.env"
+VECTOR_SIZE = 1024
 DIFFERENCES_LOG_FILE = "differences.log"
+MODEL = SentenceTransformer('intfloat/multilingual-e5-large')
+
 
 # Load environment variables
 load_dotenv(ENV_PATH)
@@ -46,14 +48,15 @@ file_handler.setLevel(logging.INFO)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-# Model initialiseren
-model = SentenceTransformer('all-MiniLM-L6-v2')
-
-
 def encode_text(text):
     """Encodeert tekst naar een vector."""
-    return model.encode(text).tolist()
-
+    vector = MODEL.encode(text)
+    if len(vector) != VECTOR_SIZE:
+        # Padding naar VECTOR_SIZE dimensies
+        padded_vector = np.zeros(1024, dtype=np.float32)
+        padded_vector[:len(vector)] = vector
+        return padded_vector.tolist()
+    return vector.tolist()
 
 def generate_unique_id():
     """Genereert een unieke ID."""
@@ -111,3 +114,4 @@ def create_snapshot(collection_name):
         logger.info(f"Snapshot van collectie '{collection_name}' aangemaakt.")
     except Exception as e:
         logger.error(f"Fout bij maken snapshot: {e}")
+
