@@ -1,19 +1,12 @@
-import numpy as np
 from qdrant_client.models import PointStruct, PointIdsList
-from Credit_Card_Selector.Database.general_utils import logger, encode_text, generate_unique_id, load_csv_data, \
+from Credit_Card_Selector.Database.general_utils import get_logger, encode_text, generate_unique_id, load_csv_data, \
     normalize_value, create_collection_if_not_exists, create_snapshot
 from Credit_Card_Selector.Database.qdrant_config import qdrant_client
 
 # === Configuratie ===
 CREDIT_CARDS_COLLECTION = "credit_cards"
 CSV_PATH = "../../../Data_Handler/PreProcessor/merged_credit_cards.csv"
-
-
-def normalize_value(value):
-    """Normaliseer waarde, behandel NaN of lege waarden."""
-    if value is None or (isinstance(value, float) and np.isnan(value)):
-        return None
-    return value
+logger = get_logger(__file__)
 
 
 def update_or_add_credit_card(credit_card):
@@ -24,14 +17,19 @@ def update_or_add_credit_card(credit_card):
     card_link = credit_card.get("Card_Link")
     existing_card = find_existing_credit_card(card_id, card_link)
 
-    encoded_text = f"{credit_card['Card_ID']} {credit_card['Card_Type']} {credit_card['Card_Network']} {credit_card['Eligibility_Requirements']}"
+    encoded_text = (f"{credit_card['Card_ID']} "
+                    f"{credit_card['Card_Type']} "
+                    f"{credit_card['Card_Network']} "
+                    f"{credit_card['Eligibility_Requirements']}")
+
     new_vector = encode_text(encoded_text)
 
     if existing_card:
         existing_payload = existing_card.payload
         differences = [
             f"{key}: '{normalize_value(existing_payload.get(key))}' -> '{normalize_value(credit_card[key])}'"
-            for key in credit_card if str(normalize_value(existing_payload.get(key))) != str(normalize_value(credit_card[key]))
+            for key in credit_card if
+            str(normalize_value(existing_payload.get(key))) != str(normalize_value(credit_card[key]))
         ]
 
         if differences:

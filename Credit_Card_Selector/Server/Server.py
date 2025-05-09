@@ -1,17 +1,18 @@
 from flask import Flask, request, jsonify
-from Credit_Card_Selector.Database.general_utils import logger, load_csv_data, create_collection_if_not_exists, \
+from Credit_Card_Selector.Database.general_utils import get_logger, load_csv_data, create_collection_if_not_exists, \
     create_snapshot
 from Credit_Card_Selector.Database.Credit_Card_Profiles_Handler.credit_card_profiles_handler import (
     handle_survey_response
 )
 
 from Credit_Card_Selector.Database.Credit_Card_Handler.credit_card_handler import (
-    update_or_add_credit_card, CREDIT_CARDS_COLLECTION, SERVER_CSV_PATH  # Zorg ervoor dat dit correct wordt geïmporteerd
+    update_or_add_credit_card, CREDIT_CARDS_COLLECTION, CSV_PATH
 )
 from Data_Handler.PreProcessor.PreProcessing import find_csv_files, merge_dataframes, load_dataframes, \
     categorize_columns, save_dataframe
 
 app = Flask(__name__)
+logger = get_logger(__file__)
 
 
 @app.route('/process_survey', methods=['POST'])
@@ -20,14 +21,19 @@ def process_survey():
     try:
         data = request.get_json()
         if not data:
+            logger.warning("❗ Geen JSON-gegevens ontvangen.")
             return jsonify({"error": "Geen JSON-gegevens ontvangen."}), 400
 
+        logger.info(f"📥 Binnengekomen surveydata: {data}")
         recommended_cards = handle_survey_response(data)
 
         if not recommended_cards:
+            logger.info("📭 Geen geschikte kaarten gevonden.")
             return jsonify({"message": "Geen geschikte kaarten gevonden."}), 200
 
+        logger.info(f"📤 Aanbevolen kaarten: {[card.get('Card_ID', 'onbekend') for card in recommended_cards]}")
         return jsonify({"recommended_cards": recommended_cards}), 200
+
     except Exception as e:
         logger.error(f"❌ Fout bij verwerken survey: {str(e)}")
         return jsonify({"error": str(e)}), 500
@@ -41,8 +47,8 @@ def update_database():
         create_snapshot(CREDIT_CARDS_COLLECTION)
         create_collection_if_not_exists(CREDIT_CARDS_COLLECTION)
 
-        data = load_csv_data(SERVER_CSV_PATH)
-        print(SERVER_CSV_PATH + " " + str(data))
+        data = load_csv_data(CSV_PATH)
+        print(CSV_PATH + " " + str(data))
         if data is None:
             return jsonify({"error": "Kan CSV niet laden of is leeg."}), 500
 

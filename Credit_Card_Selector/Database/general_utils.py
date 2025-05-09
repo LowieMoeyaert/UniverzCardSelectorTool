@@ -1,4 +1,8 @@
 import logging
+import os
+from pathlib import Path
+from typing import Any, Callable, Optional
+
 import colorlog
 import uuid
 import numpy as np
@@ -11,14 +15,51 @@ from sentence_transformers import SentenceTransformer
 from Credit_Card_Selector.Database.qdrant_config import qdrant_client
 
 # === Configuratie ===
-ENV_PATH = "../../../../.env"
-VECTOR_SIZE = 1024
+ENV_PATH = Path("CREDIT_CARD_SELECTOR/.env")
 DIFFERENCES_LOG_FILE = "differences.log"
-MODEL = SentenceTransformer('intfloat/multilingual-e5-large')
 
 
-# Load environment variables
-load_dotenv(ENV_PATH)
+# === Load environment variables ===
+def load_env():
+    load_dotenv(dotenv_path=ENV_PATH)
+
+
+load_env()
+
+
+def load_env_value(
+        key: str,
+        default: Any = None,
+        cast: Optional[Callable[[str], Any]] = None,
+        log: Optional[Callable[[str], None]] = print
+) -> Any:
+    """Load a value from environment with optional type casting and fallback."""
+    raw_value = os.getenv(key)
+
+    if raw_value is None:
+        log(f"[env] {key} not set. Using default: {default}")
+        return default
+
+    try:
+        value = cast(raw_value) if cast else raw_value
+        log(f"[env] {key} loaded: {value}")
+        return value
+    except Exception as e:
+        log(f"[env] Failed to cast {key}: {e}. Using default: {default}")
+        return default
+
+
+# === Load model settings ===
+VECTOR_SIZE = load_env_value("VECTOR_SIZE", default=1024, cast=int)
+MODEL_NAME = load_env_value("SENTENCE_TRANSFORMER_MODEL", default="all-MiniLM-L6-v2")
+
+try:
+    MODEL = SentenceTransformer(MODEL_NAME)
+    print(f"[model] Loaded model: {MODEL_NAME}")
+except Exception as e:
+    fallback_model = "all-MiniLM-L6-v2"
+    print(f"[model] Failed to load '{MODEL_NAME}', using fallback '{fallback_model}': {e}")
+    MODEL = SentenceTransformer(fallback_model)
 
 # === Logging configuratie ===
 logger = logging.getLogger("credit_card_logger")
@@ -48,6 +89,46 @@ file_handler.setLevel(logging.INFO)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
+
+def get_logger(module_file: str) -> logging.Logger:
+    script_name = Path(module_file).stem
+
+    # Bepaal project root en log map
+    project_root = Path(__file__).resolve().parents[2]
+    log_dir = project_root / "Credit_Card_Selector" / "Logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file_path = log_dir / f"{script_name}.log"
+
+    logger = logging.getLogger(script_name)
+    logger.setLevel(logging.DEBUG)
+
+    if not logger.hasHandlers():
+        # Console handler
+        console_handler = logging.StreamHandler()
+        console_formatter = colorlog.ColoredFormatter(
+            "%(log_color)s%(asctime)s - %(levelname)s - %(message)s",
+            log_colors={
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'bold_red',
+            }
+        )
+        console_handler.setFormatter(console_formatter)
+
+        # File handler
+        file_handler = logging.FileHandler(str(log_file_path), encoding="utf-8")
+        file_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        file_handler.setFormatter(file_formatter)
+        file_handler.setLevel(logging.INFO)
+
+        logger.addHandler(console_handler)
+        logger.addHandler(file_handler)
+
+    return logger
+
+
 def encode_text(text):
     """Encodeert tekst naar een vector."""
     vector = MODEL.encode(text)
@@ -57,6 +138,7 @@ def encode_text(text):
         padded_vector[:len(vector)] = vector
         return padded_vector.tolist()
     return vector.tolist()
+
 
 def generate_unique_id():
     """Genereert een unieke ID."""
@@ -75,12 +157,13 @@ def load_csv_data(csv_path):
 
 
 def normalize_value(value):
-    """Converteert NaN naar None en standaardiseert types voor vergelijking."""
-    if isinstance(value, float) and np.isnan(value):
+    """Converteert NaN of None naar None en stript strings."""
+    if value is None or (isinstance(value, float) and np.isnan(value)):
         return None
     if isinstance(value, str):
         return value.strip()
     return value
+
 
 
 def collection_exists(collection_name):
@@ -107,6 +190,7 @@ def create_collection_if_not_exists(collection_name):
     else:
         logger.info(f"Collectie '{collection_name}' bestaat al.")
 
+
 def create_snapshot(collection_name):
     """Maak een snapshot van de collectie."""
     try:
@@ -114,4 +198,3 @@ def create_snapshot(collection_name):
         logger.info(f"Snapshot van collectie '{collection_name}' aangemaakt.")
     except Exception as e:
         logger.error(f"Fout bij maken snapshot: {e}")
-
