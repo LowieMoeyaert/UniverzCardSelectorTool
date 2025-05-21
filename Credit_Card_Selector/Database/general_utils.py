@@ -16,7 +16,6 @@ from Credit_Card_Selector.Database.qdrant_config import qdrant_client
 
 # === Configuratie ===
 ENV_PATH = Path("CREDIT_CARD_SELECTOR/.env")
-DIFFERENCES_LOG_FILE = "differences.log"
 
 
 # === Load environment variables ===
@@ -51,7 +50,7 @@ def load_env_value(
 
 # === Load model settings ===
 VECTOR_SIZE = load_env_value("VECTOR_SIZE", default=1024, cast=int)
-MODEL_NAME = load_env_value("SENTENCE_TRANSFORMER_MODEL", default="all-MiniLM-L6-v2")
+MODEL_NAME = load_env_value("SENTENCE_TRANSFORMER_MODEL", default="intfloat/multilingual-e5-large")
 
 try:
     MODEL = SentenceTransformer(MODEL_NAME)
@@ -79,15 +78,9 @@ console_formatter = colorlog.ColoredFormatter(
 )
 console_handler.setFormatter(console_formatter)
 
-# Bestand logging zonder kleur
-file_handler = logging.FileHandler(DIFFERENCES_LOG_FILE, encoding="utf-8")
-file_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-file_handler.setFormatter(file_formatter)
-file_handler.setLevel(logging.INFO)
 
 # Handlers toevoegen
 logger.addHandler(console_handler)
-logger.addHandler(file_handler)
 
 
 def get_logger(module_file: str) -> logging.Logger:

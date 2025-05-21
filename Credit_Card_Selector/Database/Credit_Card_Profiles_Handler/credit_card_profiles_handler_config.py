@@ -12,13 +12,15 @@ OLLAMA_API_URL = load_env_value("OLLAMA_API_URL")
 OLLAMA_MODEL = load_env_value("OLLAMA_MODEL")
 MAX_TOKENS = load_env_value("MAX_TOKENS", cast=int)
 CARD_FETCH_LIMIT = load_env_value("CARD_FETCH_LIMIT", default=1000, cast=int)
-LLM_API_TIMEOUT = load_env_value("LLM_API_TIMEOUT", default=180, cast=int)  # Timeout in seconds for LLM API calls
+LLM_API_TIMEOUT = load_env_value("LLM_API_TIMEOUT", default=1000, cast=int)  # Timeout in seconds for LLM API calls
 # Dynamische filterconfiguratie
 FILTER_CONFIG = {
     "Minimum_Income": "min",
     "Interest_Rate": "min",
     "Card_Type": "match",
-    "Rewards": "match"
+    "Rewards": "match",
+    "Credit_Score": "min",
+    "Monthly_Income": "min"
 }
 
 
