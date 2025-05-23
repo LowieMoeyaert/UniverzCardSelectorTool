@@ -130,9 +130,15 @@ def categorize_columns(df):
 
 
 def main():
-    scrapers_folder = '../Scrape_Data/Scrapers'
-    merged_output_file = 'merged_credit_cards.csv'
-    categorized_output_file = 'categorized_credit_cards.csv'
+    # Get the directory of the current script
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # Get the root directory (two levels up from current script)
+    root_dir = os.path.dirname(os.path.dirname(current_dir))
+
+    # Define paths relative to the root directory
+    scrapers_folder = os.path.join(root_dir, 'Data_Handler', 'Scrape_Data', 'Scrapers')
+    merged_output_file = os.path.join(current_dir, 'merged_credit_cards.csv')
+    categorized_output_file = os.path.join(current_dir, 'categorized_credit_cards.csv')
 
     csv_files = find_csv_files(scrapers_folder)
     dataframes = load_dataframes(csv_files)

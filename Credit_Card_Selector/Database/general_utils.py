@@ -177,11 +177,45 @@ def create_collection_if_not_exists(collection_name):
                 collection_name=collection_name,
                 vectors_config=VectorParams(size=VECTOR_SIZE, distance="Cosine")
             )
-            logger.info(f"Collectie '{collection_name}' aangemaakt.")
+            # Create index for Card_ID field
+            qdrant_client.create_payload_index(
+                collection_name=collection_name,
+                field_name="Card_ID",
+                field_schema="keyword"
+            )
+            # Create index for Card_Link field
+            qdrant_client.create_payload_index(
+                collection_name=collection_name,
+                field_name="Card_Link",
+                field_schema="keyword"
+            )
+            logger.info(f"Collectie '{collection_name}' aangemaakt met indexen voor Card_ID en Card_Link.")
         except Exception as e:
             logger.error(f"Fout bij aanmaken collectie: {e}")
     else:
         logger.info(f"Collectie '{collection_name}' bestaat al.")
+        # Ensure indexes exist even for existing collections
+        try:
+            qdrant_client.create_payload_index(
+                collection_name=collection_name,
+                field_name="Card_ID",
+                field_schema="keyword"
+            )
+            logger.info(f"Index voor Card_ID aangemaakt in bestaande collectie '{collection_name}'.")
+        except Exception as e:
+            # If index already exists, this will throw an error, which is fine
+            logger.debug(f"Index voor Card_ID bestaat mogelijk al: {e}")
+
+        try:
+            qdrant_client.create_payload_index(
+                collection_name=collection_name,
+                field_name="Card_Link",
+                field_schema="keyword"
+            )
+            logger.info(f"Index voor Card_Link aangemaakt in bestaande collectie '{collection_name}'.")
+        except Exception as e:
+            # If index already exists, this will throw an error, which is fine
+            logger.debug(f"Index voor Card_Link bestaat mogelijk al: {e}")
 
 
 def create_snapshot(collection_name):
